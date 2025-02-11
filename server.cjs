@@ -1,20 +1,17 @@
 const express = require("express");
+const cors = require('cors')
+
 const app = express();
 
-app.use(logger)
-
-app.get("/", (req, res) => {
-  console.log("wazzap");
-  res.send("Aight?");
-});
+app.use(cors());
+app.use(express.json());
 
 const userRouter = require("./routes/users");
+const authRouter = require("./routes/auth");
 
 app.use('/users', userRouter);
+app.use('/auth', authRouter);
 
-function logger(req, res, next) {
-    console.log(req.originalUrl)
-    next()
-}
+const port = 3000;
 
-app.listen(3000);
+app.listen(port, () => {console.log(`Server Running on Port:${port}`)});
