@@ -1,31 +1,23 @@
 const express = require("express")
 const router = express.Router()
 
-const db = require("../db")
+const db = require("../config/db")
 
 const authenticateJWT = require("../middleware/jwtverify");
+const getUserById = require("../controllers/userController");
 const checkAdmin = require("../middleware/verifyadmin");
 
 
 router.
 route("/:id").
-get(authenticateJWT,(req, res) => {
-    const sql = "SELECT * FROM users WHERE userid = ?"
-    const params  = req.params.id;
+get(authenticateJWT,getUserById);
 
-    db.query(sql, params, (err, data) => {
-        if(err){
-            return res.status(500).json({error: `Internal Server Error : ${err}`})
-        }
-
-        if(data.length === 1){
-            const user = data[0]
-            console.log(user.userid)
-            return res.status(200).json({user: user});
-        }
-
-    })
-})
+//giusa sa isa ka file, so buhaton ug proper folder structuring 
+//config = setup database and configs
+//controllers = ang code sa route ibutnag ug functions sa controllers
+//models = models ang mga query mu transact sa database, tawagon si config.js import si config ipasa sa controllers ang result
+//routes = routes lang
+//uploads = images
 
 
 //role based authentication
