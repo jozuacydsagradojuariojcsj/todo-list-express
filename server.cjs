@@ -8,9 +8,11 @@ app.use(express.json());
 
 const userRouter = require("./routes/users");
 const authRouter = require("./routes/auth");
+const adminRouter = require("./routes/admin")
 
 app.use('/users', userRouter);
 app.use('/auth', authRouter);
+app.use('/admin', adminRouter);
 
 const port = 3000;
 
