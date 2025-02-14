@@ -13,7 +13,7 @@ const comparePassword = (req, res, user ) => {
         if (result) {
             const token = jwt.sign({id:user.id, username:user.username, roles:user.roles},secretKey,{expiresIn: expires});
             console.log(token)
-            return res.status(200).json({message: "Login Successful", user});
+            return res.status(200).json({message: "Login Successful", user, token});
         }else{
             return res.status(401).json({error: `Incorrect Password, ${err}`});
         }

@@ -65,10 +65,33 @@ const deleteUserById = (userId) => {
 
 }
 
-const patchUserById = (values) => {
+const patchUserById = (userId,values) => {
     return new Promise((resolve, reject) => {
-        const sql = "UPDATE users SET password = ?, roles = ?, email = ? WHERE userid = ?";
-        db.query(sql, values, (err, data) => {
+
+        let sql = "UPDATE users SET ";
+        let fields = [];
+        let sqlValues = [];
+
+        if(values.username){
+            fields.push("username = ?");
+            sqlValues.push(username.password);
+        }
+        if(values.password){
+            fields.push("password = ?");
+            sqlValues.push(values.password);
+        }
+        if(values.roles){
+            fields.push("roles = ?");
+            sqlValues.push(values.roles);
+        }
+        if(fields.length === 0){
+            return reject(new Error("No Fields to Update"));
+        }
+        
+        sql += `${fields.join(", ")} WHERE userid = ?`
+        sqlValues.push(userId);
+
+        db.query(sql, sqlValues, (err, data) => {
             if(err){
                 console.log(`Error on Models DB: ${err}`);
                 return reject(err);

@@ -32,8 +32,6 @@ const adminCreateUser = async (req,res) => {
     }
 }
 
-//dungag ug validation dapat ang format sa email naay @gmail.com etc.
-//sa password dapat naay special character uppercase ug lowercase dayon minimum of 8 characters 
 
 const adminGetUser = async (req,res) => {
     try{
@@ -48,13 +46,22 @@ const adminGetUser = async (req,res) => {
 
 const adminPatchUser = async(req,res) => {
     try{
-        const {password, roles} = req.body;
+        const {password, roles, email} = req.body;
         const userId = req.params.id;
 
-        const hashedPassword = await bcrypt.hash(password,10);
-        const values = [hashedPassword, roles, userId];
+        let values = {};
 
-        const updatedUser = await patchUserById(values);
+        if (password) {
+            values.password = await bcrypt.hash(password,10);
+        }
+        if (roles) {
+            values.roles = roles;
+        }
+        if (email) {
+            values.email = email;
+        }
+
+        const updatedUser = await patchUserById(userId,values);
         console.log(updatedUser.affectedRows);
 
         return res.status(200).json({message: "User Updated Sucessfully"});
