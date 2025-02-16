@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "server.cjs",
   "scripts": {
-    "devStart": "nodemon F:/try/server/src/server.cjs",
+    "devStart": "nodemon src/server.cjs",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

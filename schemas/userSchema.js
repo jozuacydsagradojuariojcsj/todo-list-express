@@ -19,4 +19,13 @@ const updateUserSchema = z.object({
     roles: z.enum(["admin","user"]).optional(),
 });
 
-module.exports = { createUserSchema, updateUserSchema };
+
+const loginUserSchema = z.object({
+    identifier: z.union([
+        z.string().email("Invalid Email Format"),
+        z.string().min(5,"Username must be at least 5 characters or more")
+    ]),
+    password: z.string()
+});
+
+module.exports = { createUserSchema, updateUserSchema, loginUserSchema };

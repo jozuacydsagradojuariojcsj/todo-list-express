@@ -1,6 +1,25 @@
 const { StatusCodes } = require("http-status-codes");
 const z = require('zod');
 
+
+const loginUserValidation = (schema) => {
+    return (req,res,next) => {
+        try{
+            schema.parse(req.body);
+            next();
+        }catch(e){
+            if(e instanceof z.ZodError) {
+                const errorMessages = e.errors.map((issue) => ({
+                    message: `${issue.path.join('.')} is ${issue.message}`,
+                }));
+                res.status(StatusCodes.BAD_REQUEST).json({error: "Invalid Data", details:errorMessages});
+            }else{
+                res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({error: "Internal Server Error"});
+            }
+        }
+    }
+}
+
 const createUserValidation = (schema) => {
     return (req, res, next) => {
         try{
@@ -73,4 +92,4 @@ const createTodoValidation = (schema) => {
     }
 }
 
-module.exports = { createUserValidation, updateUserValidation, createTodoValidation };
+module.exports = { createUserValidation, updateUserValidation, createTodoValidation, loginUserValidation };
